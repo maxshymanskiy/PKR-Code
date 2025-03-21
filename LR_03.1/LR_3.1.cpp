@@ -24,9 +24,11 @@ int main()
 	p->link2->link1 = p;				// 12
 	p->link2->link2 = p->link1->link2;	// 13
 
+	delete p->link2;
 	delete p->link1->link2;
 	delete p->link1;
-	delete p->link2;
 	delete p;
+
+	return 0;
 }
 
