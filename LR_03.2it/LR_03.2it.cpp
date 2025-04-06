@@ -49,7 +49,7 @@ void reverseList(Elem*& first, Elem*& last)
 	}
 	last = first;
 	first = newFirst;
-}
+}	
 
 void printList(Elem* first)
 {
