@@ -1,6 +1,7 @@
 #include <iostream>
 #include <fstream>
 #include <string>
+#include <Windows.h>
 using namespace std;
 
 typedef string Info;
@@ -22,7 +23,7 @@ void enqueue(Elem*& first, Elem*& last, const Info& value) {
 
 Info dequeue(Elem*& first, Elem*& last) {
     if (first == NULL) {
-        cerr << "Error: Cannot dequeue from an empty queue!" << endl;
+        cerr << "Помилка: Неможливо видалити елемент з порожньої черги!" << endl;
         return "";
     }
     Elem* tmp = first->link;
@@ -94,7 +95,7 @@ void processWords(const string& str, Elem*& queueFirst, Elem*& queueLast) {
 void processFile(const string& filename, Elem*& evenQueueFirst, Elem*& evenQueueLast, Elem*& oddQueueFirst, Elem*& oddQueueLast) {
     ifstream file(filename);
     if (!file.is_open()) {
-        cerr << "Could not open the file: " << filename << endl;
+        cerr << "Не вдалося відкрити файл: " << filename << endl;
         return;
     }
 
@@ -112,8 +113,28 @@ void processFile(const string& filename, Elem*& evenQueueFirst, Elem*& evenQueue
     file.close();
 }
 
+void printFileContent(const string& filename) {
+    ifstream file(filename);
+    if (!file.is_open()) {
+        cerr << "Не вдалося відкрити файл: " << filename << endl;
+        return;
+    }
+
+    cout << "===== ВМІСТ ФАЙЛУ =====" << endl;
+    string line;
+    int lineNumber = 1;
+    while (getline(file, line)) {
+        cout << lineNumber << ": " << line << endl;
+        lineNumber++;
+    }
+    cout << "=======================" << endl;
+    file.close();
+}
+
 int main() {
-    // Ініціалізуємо черги
+    SetConsoleCP(1251);
+    SetConsoleOutputCP(1251);
+
     Elem* evenQueueFirst = NULL, * evenQueueLast = NULL;
     Elem* oddQueueFirst = NULL, * oddQueueLast = NULL;
     Elem* mergedQueueFirst = NULL, * mergedQueueLast = NULL;
@@ -121,19 +142,21 @@ int main() {
     const string filename = "input.txt";
     processFile(filename, evenQueueFirst, evenQueueLast, oddQueueFirst, oddQueueLast);
 
-    cout << "Even lines queue: ";
+    printFileContent(filename);
+
+    cout << "Черга парних рядків: ";
     printQueue(evenQueueFirst);
-    cout << "Odd lines queue: ";
+    cout << "Черга непарних рядків: ";
     printQueue(oddQueueFirst);
 
     if (areQueuesEqual(evenQueueFirst, oddQueueFirst)) {
-        cout << "Queues are equal. Destroying odd queue." << endl;
+        cout << "Черги однакові. Видаляємо чергу непарних рядків." << endl;
         destroyQueue(oddQueueFirst, oddQueueLast);
     }
     else {
-        cout << "Queues are not equal. Merging queues." << endl;
+        cout << "Черги різні. Об'єднуємо черги." << endl;
         mergeQueues(evenQueueFirst, evenQueueLast, oddQueueFirst, oddQueueLast, mergedQueueFirst, mergedQueueLast);
-        cout << "Merged queue: ";
+        cout << "Об'єднана черга: ";
         printQueue(mergedQueueFirst);
     }
 

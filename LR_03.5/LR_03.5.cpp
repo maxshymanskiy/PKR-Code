@@ -18,14 +18,14 @@ Elem* push(Elem* top, Info value) {
 }
 
 Elem* pop(Elem* top, Info& value) {
-    if (top == nullptr) {
-        cerr << "The stack is empty" << endl;
-        return nullptr;
-    }
-    Elem* tmp = top->link;
-    Info value = top->info;
-    delete top;
-    return tmp;
+   if (top == nullptr) {
+       cerr << "The stack is empty" << endl;
+       return nullptr;
+   }
+   Elem* tmp = top->link;
+   value = top->info;
+   delete top;
+   return tmp;
 }
 
 Elem* createStackFromFile(string filename) {

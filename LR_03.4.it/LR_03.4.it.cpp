@@ -20,14 +20,14 @@ void insert(Elem*& L, Info value) {
     else {
         L = tmp;
     }
-    tmp->link = L;
+    tmp->link = L;  // Новий елемент посилається на початок списку, утворюючи кільце
 }
 
 void insertBeforeV1(Elem*& head, Info V1, Info V2) {
     if (!head) return;
 
     Elem* last = head;
-    while (last->link != head)
+    while (last->link != head)  // Шукаємо останній елемент (який посилається на head)
         last = last->link;
 
     Elem* current = head;
@@ -66,7 +66,7 @@ void remove(Elem*& L) {
     Elem* first = L;
     Elem* current = L->link;
 
-    while (current != first) {
+    while (current != first) { // Видаляємо всі елементи, поки не повернемося до початку
         Elem* temp = current;
         current = current->link;
         delete temp;
@@ -86,7 +86,7 @@ void display(Elem* L) {
     do {
         cout << tmp->info << " ";
         tmp = tmp->link;
-    } while (tmp != L);
+    } while (tmp != L);     // Цикл продовжується, поки не повернемося до початку
     cout << endl;
 }
 

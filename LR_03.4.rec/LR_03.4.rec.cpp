@@ -8,12 +8,12 @@ struct Elem {
     Info info;
 };
 
-// Рекурсивна вставка в кінець списку
+// Рекурсивна вставка в кінець кільцевого списку
 void insert(Elem*& L, Info value, Elem* first = nullptr, Elem* current = nullptr) {
     if (L == nullptr) {
         Elem* tmp = new Elem;
         tmp->info = value;
-        tmp->link = tmp;
+        tmp->link = tmp;  // Кільцевий список: єдиний елемент посилається сам на себе
         L = tmp;
         return;
     }
@@ -23,15 +23,22 @@ void insert(Elem*& L, Info value, Elem* first = nullptr, Elem* current = nullptr
         current = L;
     }
 
-    if (current->link == first) {
+    // Умова виходу: якщо наступний елемент - перший (кільце замикається)
+    if (current->link == first) {  // Перевірка кільцевої структури
         Elem* tmp = new Elem;
         tmp->info = value;
-        tmp->link = first;
+        tmp->link = first;  // Новий елемент посилається на початок
         current->link = tmp;
         return;
     }
 
     insert(L, value, first, current->link);
+}
+
+// Рекурсивний пошук останнього елемента (заміна while)
+Elem* findLastRecursive(Elem* start, Elem* current) {
+    if (current->link == start) return current;  // Знайшли останній (посилається на start)
+    return findLastRecursive(start, current->link);
 }
 
 // Рекурсивна вставка перед заданим значенням
@@ -41,11 +48,7 @@ void insertBeforeV1(Elem*& head, Info V1, Info V2, Elem* current = nullptr,
 
     if (current == nullptr) {
         current = head;
-        prev = head;
-        // Знаходимо останній елемент
-        while (prev->link != head) {
-            prev = prev->link;
-        }
+        prev = findLastRecursive(head, head);  // Рекурсивно знаходимо останній елемент
         first = head;
     }
 
@@ -57,23 +60,21 @@ void insertBeforeV1(Elem*& head, Info V1, Info V2, Elem* current = nullptr,
 
         if (current == head) {
             head = newNode;
-            // Оновлюємо посилання останнього елемента
-            Elem* last = head;
-            while (last->link != current) {
-                last = last->link;
-            }
-            last->link = head;
+            // Рекурсивно оновлюємо посилання останнього елемента
+            Elem* last = findLastRecursive(head, head);
+            last->link = head;  // Замикаємо кільце
         }
 
         insertBeforeV1(head, V1, V2, current->link, newNode, first);
     }
     else {
-        if (current->link == first) return;
+        // Умова виходу: повернулись на початок
+        if (current->link == first) return;  // Перевірка кільцевої структури
         insertBeforeV1(head, V1, V2, current->link, current, first);
     }
 }
 
-// Рекурсивне видалення списку
+// Рекурсивне видалення кільцевого списку
 void remove(Elem*& L, Elem* current = nullptr, Elem* first = nullptr) {
     if (L == nullptr) return;
 
@@ -81,7 +82,7 @@ void remove(Elem*& L, Elem* current = nullptr, Elem* first = nullptr) {
         first = L;
         current = L->link;
     }
-    else if (current == first) {
+    else if (current == first) {  // Умова виходу: обійшли все кільце
         delete first;
         L = nullptr;
         return;
@@ -92,7 +93,7 @@ void remove(Elem*& L, Elem* current = nullptr, Elem* first = nullptr) {
     remove(L, next, first);
 }
 
-// Рекурсивний вивід списку
+// Рекурсивний вивід кільцевого списку
 void display(Elem* L, Elem* current = nullptr, bool firstPass = true) {
     if (L == nullptr) {
         cout << "Список порожній" << endl;
@@ -105,7 +106,8 @@ void display(Elem* L, Elem* current = nullptr, bool firstPass = true) {
 
     cout << current->info << " ";
 
-    if (current->link == L && !firstPass) {
+    // Умова виходу: наступний елемент - початок (не перший прохід)
+    if (current->link == L && !firstPass) {  // Перевірка кільцевої структури
         cout << endl;
         return;
     }
