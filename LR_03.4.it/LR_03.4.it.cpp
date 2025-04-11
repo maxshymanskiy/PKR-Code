@@ -110,7 +110,7 @@ int main() {
     cout << "Початковий список: ";
     display(L);
 
-    insertBeforeV1(L, 3, 9);
+    insertBeforeV1(L, 5, 9);
 
     cout << "Після вставки 9 перед кожним 3: ";
     display(L);
