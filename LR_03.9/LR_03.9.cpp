@@ -11,7 +11,6 @@ struct Node
     Info info;
 };
 
-// Виведення бінарного дерева на екран
 void PrintTree(Node* root, int level)
 {
     if (root != NULL)
@@ -53,7 +52,6 @@ void PrintTreeWithHighlight(Node* root, int level, int highlight_value)
     PrintTreeWithHighlight(root->left, level, highlight_value);
 }
 
-// Обчислення висоти дерева
 int Height(Node* root)
 {
     if (root == NULL)
@@ -89,7 +87,6 @@ void LeftRotation(Node*& root)
     root = tmp1;
 }
 
-// Функція для знаходження максимального елемента
 Node* FindMax(Node* root)
 {
     if (root->right != NULL)
@@ -98,7 +95,6 @@ Node* FindMax(Node* root)
         return root;
 }
 
-// Видалення всього дерева
 void DeleteTree(Node*& root)
 {
     if (root != NULL)
