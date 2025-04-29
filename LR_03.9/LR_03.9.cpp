@@ -233,10 +233,12 @@ Node* BinarySearchDelete(Node* root, Info value)
             return temp;
         }
         // ПУНКТ 8: Видалення вузла з двома дочірніми
-        root->info = FindMax(root->left)->info;
-        root->left = BinarySearchDelete(root->left, root->info);
+        Info maxValue = FindMax(root->left)->info;
+        root->info = maxValue;
+        root->left = BinarySearchDelete(root->left, maxValue);
         return root;
     }
+
     if (value < root->info)
     {
         root->left = BinarySearchDelete(root->left, value);
