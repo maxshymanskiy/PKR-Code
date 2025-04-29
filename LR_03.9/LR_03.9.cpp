@@ -24,32 +24,28 @@ void PrintTree(Node* root, int level)
 }
 
 // Виведення бінарного дерева з виділенням певного елемента
-void PrintTreeWithHighlight(Node* root, int level, int highlight_value)
+void PrintTreeWithHighlight(Node* root, int level, Node* highlight_node)
 {
     if (root == NULL)
         return;
 
-    // Збільшуємо відступ для наступного рівня
     const int INDENT = 4;
     level += INDENT;
 
-    // Спочатку виводимо праве піддерево (воно буде зверху)
-    PrintTreeWithHighlight(root->right, level, highlight_value);
+    PrintTreeWithHighlight(root->right, level, highlight_node);
 
-    // Потім виводимо сам корінь
     cout << endl;
     for (int i = INDENT; i < level; i++)
         cout << " ";
 
-    if (root->info == highlight_value) {
+    if (root == highlight_node) { // Порівнюємо адреси вузлів
         cout << "[" << root->info << "]";
     }
     else {
         cout << root->info;
     }
 
-    // Нарешті виводимо ліве піддерево (воно буде знизу)
-    PrintTreeWithHighlight(root->left, level, highlight_value);
+    PrintTreeWithHighlight(root->left, level, highlight_node);
 }
 
 int Height(Node* root)
@@ -107,15 +103,14 @@ void DeleteTree(Node*& root)
 }
 
 // Постфіксний обхід з виділенням елемента
-void PostfixOrderWithHighlight(Node* root, int highlight_value)
+void PostfixOrderWithHighlight(Node* root, Node* highlight_node)
 {
     if (root != NULL)
     {
-        // Постфіксний обхід: ліве піддерево -> праве піддерево -> корінь
-        PostfixOrderWithHighlight(root->left, highlight_value);
-        PostfixOrderWithHighlight(root->right, highlight_value);
+        PostfixOrderWithHighlight(root->left, highlight_node);
+        PostfixOrderWithHighlight(root->right, highlight_node);
 
-        if (root->info == highlight_value) {
+        if (root == highlight_node) { // Порівнюємо адреси вузлів
             cout << "[" << root->info << "] ";
         }
         else {
@@ -261,10 +256,10 @@ void FindFirstMax(Node* root)
     if (maxNode != NULL) {
         cout << "Перший елемент з максимальним значенням: " << maxNode->info << endl;
         cout << "Дерево з виділеним елементом: ";
-        PrintTreeWithHighlight(root, 0, maxNode->info);
+        PrintTreeWithHighlight(root, 0, maxNode); // Передаємо вузол для підсвічування
 
         cout << "\nПостфіксний обхід з виділеним елементом: ";
-        PostfixOrderWithHighlight(root, maxNode->info);
+        PostfixOrderWithHighlight(root, maxNode); // Передаємо вузол
         cout << endl;
     }
     else {
